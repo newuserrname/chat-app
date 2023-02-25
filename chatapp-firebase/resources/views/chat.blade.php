@@ -1,8 +1,10 @@
 @extends('layouts.app')
 @section('content')
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <div id="app-chat-vue">
-        <app-chat-component></app-chat-component>
+    <div id="chat_vue">
+        <chat-vue :current_id="{{json_encode($seeker)}}"
+                  :provider_id="{{json_encode($provider->id)}}"
+                  :conversation_id="{{json_encode($documentId)}}"></chat-vue>
     </div>
     <style>
         .container {

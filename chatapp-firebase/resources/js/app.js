@@ -1,7 +1,7 @@
 import './bootstrap';
 
-import { createApp } from 'vue';
-import VueChatScroll from 'vue-chat-scroll';
+import { createApp } from 'vue'
+import ChatComponent from './component/AppChatComponent.vue';
 
 // Import the functions you need from the SDKs you need
 import firebase from "firebase/compat/app";
@@ -32,5 +32,7 @@ try {
 }
 export {firebase, db};
 
-import AppChatComponent from './component/AppChatComponent.vue';
-createApp(AppChatComponent).use(VueChatScroll).mount("#app-chat-vue");
+// app chat component
+const app = createApp({});
+app.component('chat-vue', ChatComponent);
+app.mount('#chat_vue');

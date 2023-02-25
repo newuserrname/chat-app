@@ -21,4 +21,4 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/profile/{id}', [\App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
-Route::get('chat/provider/{id}', [\App\Http\Controllers\HomeController::class, 'chat'])->name('chat');
+Route::get('chat/provider/{id}', [\App\Http\Controllers\HomeController::class, 'chatWithProvider'])->name('chat');
