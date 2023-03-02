@@ -34,5 +34,8 @@ export {firebase, db};
 
 // app chat component
 const app = createApp({});
+if (process.env.NODE_ENV === 'development') {
+    app.config.devtools = true;
+}
 app.component('chat-vue', ChatComponent);
 app.mount('#chat_vue');

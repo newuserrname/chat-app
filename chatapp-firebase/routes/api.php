@@ -17,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('chatlist/{id}', [\App\Http\Controllers\UserController::class, 'getUserById']);
+Route::get('/messages/{currentId}/{receiverId}', [\App\Http\Controllers\UserController::class, 'getMessages']);
