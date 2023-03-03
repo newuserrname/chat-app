@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('chatlist/{id}', [\App\Http\Controllers\UserController::class, 'getUserById']);
 Route::get('/messages/{currentId}/{receiverId}', [\App\Http\Controllers\UserController::class, 'getMessages']);
+Route::post('/send-message', [\App\Http\Controllers\UserController::class, 'sendMessage']);

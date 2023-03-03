@@ -11,7 +11,7 @@
                                     <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
                                 </div>
                                 <div class="flex-grow-1 ms-3">
-                                    <h3>{{showSelectedUser ? selectedUser : this.provider_name}}</h3>
+                                    <h3>{{showSelectedName ? selectedName: this.provider_name}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -34,51 +34,31 @@
                 </div>
                 <div class="modal-body">
                     <div class="msg-body">
-                        <ul>
-                            <li class="sender">
-                                <p> Hey, Are you there? </p>
-                                <span class="time">10:06 am</span>
-                            </li>
-                            <li class="sender">
-                                <p> Hey, Are you there? </p>
-                                <span class="time">10:16 am</span>
-                            </li>
-                            <li class="repaly">
-                                <p>yes!</p>
-                                <span class="time">10:20 am</span>
-                            </li>
-                            <li class="sender">
-                                <p> Hey, Are you there? </p>
-                                <span class="time">10:26 am</span>
-                            </li>
-                            <li class="sender">
-                                <p> Hey, Are you there? </p>
-                                <span class="time">10:32 am</span>
-                            </li>
-                            <li class="repaly">
-                                <p>How are you?</p>
-                                <span class="time">10:35 am</span>
-                            </li>
-                            <li>
-                                <div class="divider">
-                                    <h6>Today</h6>
-                                </div>
-                            </li>
-                            <li class="repaly">
-                                <p> yes, tell me</p>
-                                <span class="time">10:36 am</span>
-                            </li>
-                            <li class="repaly">
-                                <p>yes... on it</p>
-                                <span class="time">junt now</span>
-                            </li>
-                        </ul>
+                        <div  v-for="message in messages">
+                            <ul>
+<!--                                <li>
+                                    <div class="divider">
+                                        <h6>Today</h6>
+                                    </div>
+                                </li>-->
+                                <li class="sender">
+                                    <p> Hey, Are you there? </p>
+                                    <span class="time">10:32 am</span>
+                                </li>
+                                <li class="repaly">
+                                    <p>{{ message.message }}</p>
+                                    <span class="time">{{ message.created_at }}</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div class="send-box">
-                    <form action="">
-                        <input type="text" class="form-control" aria-label="message…" placeholder="Write message…">
-                        <button type="button"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</button>
+                    <form @submit.prevent>
+                        <input type="text" class="form-control" aria-label="message…" placeholder="Write message…"
+                        v-model="message" @keyup.enter="sendMessage">
+                        <button type="button"><i class="fa fa-paper-plane" aria-hidden="true"
+                        @click="sendMessage"></i> Send</button>
                     </form>
                     <div class="send-btns">
                         <div class="attach">
@@ -99,12 +79,38 @@
 export default {
     name: "ChatBox",
     props: {
-        provider_name: {
-            type: String,
-            required: true
-        },
-        selectedUser: String,
-        showSelectedUser: true,
+        current_id: String,
+        provider_name: String,
+        provider_id: String,
+        selectedName: String,
+        selectedId: String,
+        showSelectedName: true,
+        messages: Array
+    },
+    data() {
+      return {
+          message: this.message = " "
+      }
+    },
+    methods: {
+      sendMessage() {
+          axios.post("/api/send-message", {
+              currentId: this.current_id,
+              receiverId: this.selectedId ? this.selectedId : this.provider_id,
+              message: this.message
+          }).then((response) => {
+              console.log(response.data);
+              const newMessage = {
+                  type: response.data.type,
+                  message: response.data.message,
+                  created_at: response.data.created_at
+              };
+              this.$emit("new-message", newMessage);
+              this.message = "";
+          }).catch(error => {
+              console.log(error);
+          })
+      }
     },
     watch: {
         /*selectedUser(newValue, oldValue) {

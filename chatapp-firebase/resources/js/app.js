@@ -34,8 +34,16 @@ export {firebase, db};
 
 // app chat component
 const app = createApp({});
-if (process.env.NODE_ENV === 'development') {
+/*if (process.env.NODE_ENV === 'development') {
     app.config.devtools = true;
-}
+}*/
 app.component('chat-vue', ChatComponent);
 app.mount('#chat_vue');
+
+/*db.collection('conversation_message').where('conversation_id', '==', 'dd3e312c-8cdb-4c51-97e0-d72bd0b83a0e')
+    .orderBy('created_at').get()
+    .then((snapshot) => {
+        snapshot.docs.forEach(docs => {
+            console.log(docs)
+        })
+    })*/

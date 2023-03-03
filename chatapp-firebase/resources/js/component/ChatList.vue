@@ -16,10 +16,8 @@
                             <div class="tab-pane fade show active" id="Open" role="tabpanel" aria-labelledby="Open-tab">
                                 <!-- chat-list -->
                                 <div class="chat-list"
-                                     v-for="[id, name] in filteredChatList"
-                                     v-if="isLoaded"
-                                     >
-                                    <a @click="selectedUser(name, id)" href="#" class="d-flex align-items-center">
+                                     v-for="[id, name] in filteredChatList">
+                                    <a @click="selected(name, id)" href="#" class="d-flex align-items-center">
                                         <div class="flex-shrink-0">
                                             <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
 <!--                                            <span class="active"></span>-->
@@ -42,22 +40,18 @@
 </template>
 
 <script>
-import axios from "axios";
-import chatBox from "@/component/ChatBox.vue";
 
 export default {
     name: "ChatList",
     props: {
-        current_id: {
-            type: String,
+        chatlist: {
+            type: Array,
             required: true
-        },
+        }
     },
     data() {
         return {
-            chatlist: [],
             searchUser: "",
-            isLoaded: false,
             receiverId: null,
         }
     },
@@ -75,33 +69,14 @@ export default {
                 console.log('error search User');
             }
         }
-
     },
     methods: {
-        selectedUser(name, id) {
-            this.$emit("selectUser", name)
-            this.receiverId = id
-            console.log(this.receiverId = id)
+        selected(name, id) {
+            this.$emit("selectName", name)
+            this.$emit("selectId", id)
+            //console.log(this.receiverId = id)
         },
-        listchat() {
-            axios.get("/api/chatlist/" + this.current_id)
-                .then(response => {
-                    this.chatlist = Object.entries(response.data.listchat);
-                    this.isLoaded = true;
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        },
-        getMessages() {
-            axios.get("/api/messages/" + this.current_id + "/" + this.receiverId)
-                .then(response => {
-                    console.log(response.data)
-                })
-        }
-    },
-    mounted() {
-        this.listchat();
+
     },
 }
 </script>
