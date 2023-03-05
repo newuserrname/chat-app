@@ -15,8 +15,8 @@
                     <!-- chatbox -->
                     <ChatBox
                         :current_id="current_id"
-                        :provider_name="provider_name"
-                        :provider_id="provider_id"
+                        :receiver_name="receiver_name"
+                        :receiver_id="receiver_id"
                         :selectedName="selectedName"
                         :selectedId="selectedId"
                         :showSelectedName="showSelectedName"
@@ -42,7 +42,7 @@ export default {
         ChatList,
         ChatBox
     },
-    props: ['current_id', 'provider_id', 'provider_name'],
+    props: ['current_id', 'receiver_id', 'receiver_name', 'conversation_id'],
     data() {
       return {
           selectedName: null,
@@ -75,19 +75,18 @@ export default {
                 });
         },
         getMessages() {
-            axios.get("/api/messages/" + this.current_id + "/" +
-                    (this.selectedId ? this.selectedId : this.provider_id))
+            axios.get("/api/messages/" + this.current_id + "/" + (this.selectedId ? this.selectedId : this.provider_id))
                 .then((response) => {
-                    /*const sortMessages = response.data.sort((a, b)=> {
-                        new Date(b.created_at) - new Date(a.created_at);
-                    });*/
-                    const options = { hour12: true, hour: "numeric", minute: "numeric", timeZone: "Asia/Ho_Chi_Minh" };
-                    const dataMessage = response.data.map(msg => ({
-                        type: msg.type,
-                        message: msg.message,
-                        created_at: new Date(msg.created_at).toLocaleTimeString("en-US", options)
-                    }));
-                    this.messages = dataMessage
+                    if (response.data.length > 0) {
+                        const dataMessage = response.data.map(msg => ({
+                            type: msg.type,
+                            message: msg.message,
+                            created_at: msg.created_at
+                        }));
+                        this.messages = dataMessage;
+                    } else {
+                        this.messages = "No Messages";
+                    }
                 })
                 .catch(error => {
                     console.log(error);

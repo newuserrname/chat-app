@@ -5,11 +5,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
           integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <div id="chat_vue">
         <chat-vue
-            :current_id="{{json_encode($currentId)}}"
-            :receiver_id="{{json_encode($receiverId->id)}}"
-            :conversation_id="{{json_encode($conversationId)}}"
-            :receiver_name="{{json_encode($receiverId->name)}}"></chat-vue>
+            :current_id="{{json_encode($currentId)}}"></chat-vue>
     </div>
 @endsection

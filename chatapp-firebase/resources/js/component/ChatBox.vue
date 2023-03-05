@@ -11,7 +11,7 @@
                                     <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
                                 </div>
                                 <div class="flex-grow-1 ms-3">
-                                    <h3>{{showSelectedName ? selectedName: this.provider_name}}</h3>
+                                    <h3>{{showSelectedName ? selectedName: this.receiver_name}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -34,41 +34,50 @@
                 </div>
                 <div class="modal-body">
                     <div class="msg-body">
-                        <div  v-for="message in messages">
-                            <ul>
-<!--                                <li>
-                                    <div class="divider">
-                                        <h6>Today</h6>
-                                    </div>
-                                </li>-->
-                                <li class="sender">
-                                    <p> Hey, Are you there? </p>
-                                    <span class="time">10:32 am</span>
-                                </li>
-                                <li class="repaly">
-                                    <p>{{ message.message }}</p>
-                                    <span class="time">{{ message.created_at }}</span>
-                                </li>
-                            </ul>
-                        </div>
+                        <ul>
+                            <li>
+                                <div class="divider">
+                                    <h6>No Message</h6>
+                                </div>
+                            </li>
+                            <li class="sender">
+                                <p>Message</p>
+                                <span class="time">17:00 am</span>
+                            </li>
+                            <li class="repaly">
+                                <p>Message</p>
+                                <span class="time">17:00 am</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="send-box">
                     <form @submit.prevent>
+                        <div class="btn btn-lg">
+                            <label for="image-input">
+                                <i class="fa-regular fa-image" title="Đính kèm file"></i>
+                            </label>
+                            <input id="image-input" type="file" style="display:none;">
+                        </div>
+                        <div class="btn btn-lg">
+                            <label for="tag-input">
+                                <i class="fa-solid fa-note-sticky" title="Chọn nhãn dán"></i>
+                            </label>
+                            <input id="tag-input" type="file" style="display:none;">
+                        </div>
+                        <div class="btn btn-lg">
+                            <label for="gif-input">
+                                <i class="fa-solid fa-file-import" title="Chọn file gif"></i>
+                            </label>
+                            <input id="gif-input" type="file" style="display:none;">
+                        </div>
                         <input type="text" class="form-control" aria-label="message…" placeholder="Write message…"
                         v-model="message" @keyup.enter="sendMessage">
-                        <button type="button"><i class="fa fa-paper-plane" aria-hidden="true"
-                        @click="sendMessage"></i> Send</button>
-                    </form>
-                    <div class="send-btns">
-                        <div class="attach">
-                            <div class="button-wrapper">
-                                <span class="label">
-                                    <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/upload.svg" alt="image title"> attached file
-                                </span><input type="file" name="upload" id="upload" class="upload-box" placeholder="Upload File" aria-label="Upload File">
-                            </div>
+                        <div class="btn btn-lg">
+                            <i class="fa-solid fa-face-smile" title="Chọn biểu tượng cảm xúc"></i>
                         </div>
-                    </div>
+                        <button type="button" @click="sendMessage">Send</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -76,12 +85,13 @@
 </template>
 
 <script>
+
 export default {
     name: "ChatBox",
     props: {
         current_id: String,
-        provider_name: String,
-        provider_id: String,
+        receiver_name: String,
+        receiver_id: String,
         selectedName: String,
         selectedId: String,
         showSelectedName: true,
@@ -89,28 +99,28 @@ export default {
     },
     data() {
       return {
-          message: this.message = " "
+          message: this.message
       }
     },
     methods: {
-      sendMessage() {
-          axios.post("/api/send-message", {
-              currentId: this.current_id,
-              receiverId: this.selectedId ? this.selectedId : this.provider_id,
-              message: this.message
-          }).then((response) => {
-              console.log(response.data);
-              const newMessage = {
-                  type: response.data.type,
-                  message: response.data.message,
-                  created_at: response.data.created_at
-              };
-              this.$emit("new-message", newMessage);
-              this.message = "";
-          }).catch(error => {
-              console.log(error);
-          })
-      }
+        sendMessage() {
+              axios.post("/api/send-message", {
+                  currentId: this.current_id,
+                  receiverId: this.selectedId ? this.selectedId : this.receiver_name,
+                  message: this.message
+              }).then((response) => {
+                  console.log(response.data);
+                  const newMessage = {
+                      type: response.data.type,
+                      message: response.data.message,
+                      created_at: response.data.created_at
+                  };
+                  this.$emit("new-message", newMessage);
+                  this.message = "";
+              }).catch(error => {
+                  console.log(error);
+              })
+        }
     },
     watch: {
         /*selectedUser(newValue, oldValue) {
@@ -119,3 +129,8 @@ export default {
     },
 }
 </script>
+<style scoped>
+.msg-actions i {
+    margin-right: 10px;
+}
+</style>

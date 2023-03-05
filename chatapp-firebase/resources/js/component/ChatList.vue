@@ -44,10 +44,8 @@
 export default {
     name: "ChatList",
     props: {
-        chatlist: {
-            type: Array,
-            required: true
-        }
+        chatlist: Array,
+        current_id: String,
     },
     data() {
         return {

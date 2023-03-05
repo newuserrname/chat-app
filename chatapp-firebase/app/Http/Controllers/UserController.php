@@ -6,12 +6,56 @@ use App\Models\User;
 use Google\Cloud\Firestore\FirestoreClient;
 use Google\Type\DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use function PHPUnit\Framework\assertJson;
-use function PHPUnit\Framework\isJson;
+use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
 
 class UserController extends Controller
 {
+    public function chatWithProvider($id)
+    {
+        $receiverId = User::where('id', $id)->first();
+        $currentId = Auth::id();
+
+        // Tạo một instance của FirestoreClient để tương tác với Firestore
+        $firestore = new FirestoreClient([
+            'projectId' => 'laravel-chat-app-firebase'
+        ]);
+
+        // Tạo một collection mới để lưu trữ các conversation
+        $conversation = $firestore->collection('conversation');
+
+        // Kiểm tra tồn tại của provider_id & seeker_id trong conversation
+        $existingConversation = $conversation
+            ->where('seeker_id', '=', $currentId)
+            ->where('provider_id', '=', $receiverId->id)
+            ->limit(1)
+            ->documents();
+
+        if (!$existingConversation->isEmpty()) {
+            // Lấy id conversation đã tồn tại (nhưng không có provider_id & seeker_id trong đó)
+            foreach ($existingConversation->rows() as $document) {
+                $documentID = $document->id();
+            }
+        } else {
+            // Tạo một document mới trong collection conversations để lưu trữ thông tin của cuộc trò chuyện
+            $newConversation = $conversation->add([
+                'id' => Uuid::uuid4()->toString(),
+                'seeker_id' => $currentId,
+                'provider_id' => $receiverId->id,
+            ]);
+
+            // Lấy Id document vừa tạo
+            $documentID = $newConversation->id();
+        }
+
+        return view('chat', [
+            'receiverId' => $receiverId,
+            'currentId' => $currentId,
+            'conversationId' => $documentID
+        ]);
+    }
     public function getUserById($id) {
 
         $currentId = $id;
@@ -86,21 +130,30 @@ class UserController extends Controller
         foreach ($querySnapshot2 as $documentSnapshot) {
             $conversations[] = $documentSnapshot;
         }
-        // Lấy ra id conversaion theo provider_id và seeker_id
+
+        $conversationId = null;
         foreach ($conversations as $document) {
             $conversationId = $document->data()['id'];
         }
 
-        // lấy tin nhắn
-        $query3 = $conversationMessage->where('conversation_id', '=', $conversationId)
-        ->orderBy('created_at');
-        $querySnapshot3 = $query3->documents();
+        if ($conversationId) {
+            $query3 = $conversationMessage->where('conversation_id', '=', $conversationId)
+                ->orderBy('created_at');
+            $querySnapshot3 = $query3->documents();
 
-        foreach ($querySnapshot3 as $value) {
-            $result[] = $value->data();
+            $result = [];
+            foreach ($querySnapshot3 as $value) {
+                $result[] = $value->data();
+            }
+
+            if (count($result) > 0) {
+                return response()->json($result);
+            } else {
+                return response()->json(['message' => 'No message']);
+            }
+        } else {
+            return response()->json(['message' => 'No conversation']);
         }
-
-        return response()->json($result);
     }
 
     public function sendMessage(Request $request) {
@@ -133,9 +186,12 @@ class UserController extends Controller
             break;
         }
 
-    // Set timezone and created_at
-        $timezone = new \DateTimeZone('Asia/Ho_Chi_Minh');
-        $createdAt = (new \DateTimeImmutable('now', $timezone))->getTimestamp();
+        // Tạo đối tượng Carbon ở múi giờ UTC
+        $date = Carbon::now('UTC');
+        // Chuyển múi giờ sang 'Asia/Ho_Chi_Minh'
+        $date->setTimezone('Asia/Ho_Chi_Minh');
+        // Lấy timestamp theo múi giờ 'Asia/Ho_Chi_Minh'
+        $createdAt = $date->timestamp;
 
     // Set message type
         $role = User::where('id', $currentId)->value('role');
