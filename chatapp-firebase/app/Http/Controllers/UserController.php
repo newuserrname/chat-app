@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Google\Cloud\Firestore\FieldValue;
 use Google\Cloud\Firestore\FirestoreClient;
-use Google\Type\DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -147,7 +147,7 @@ class UserController extends Controller
             }
 
             if (count($result) > 0) {
-                return response()->json($result);
+                return response()->json([$result, $currentId, $receiverId]);
             } else {
                 return response()->json(['message' => 'No message']);
             }
@@ -179,33 +179,27 @@ class UserController extends Controller
                 ->documents();
         }
 
-    // Get conversation ID
+        // Get conversation ID
         $conversationId = null;
         foreach ($conversations as $document) {
             $conversationId = $document->data()['id'];
             break;
         }
 
-        // Tạo đối tượng Carbon ở múi giờ UTC
-        $date = Carbon::now('UTC');
-        // Chuyển múi giờ sang 'Asia/Ho_Chi_Minh'
-        $date->setTimezone('Asia/Ho_Chi_Minh');
-        // Lấy timestamp theo múi giờ 'Asia/Ho_Chi_Minh'
-        $createdAt = $date->timestamp;
-
-    // Set message type
+        // Set message type
         $role = User::where('id', $currentId)->value('role');
         $type = $role == 2 ? 1 : ($role == 3 ? 0 : 3);
 
-    // Create new document and set its data
+        // Create new document and set its data
         $newDocReference = $conversationMessage->add([
-            'attachment' => null,
             'conversation_id' => $conversationId,
-            'created_at' => $createdAt,
+            'created_at' => FieldValue::serverTimestamp(),
             'deleted_at' => 0,
+            'file_attach' => null,
             'message' => $message,
             'provider_seen' => 0,
             'seeker_seen' => 0,
+            'stamp' => null,
             'type' => $type,
         ]);
     // Try to update document with ID field

@@ -35,18 +35,23 @@
                 <div class="modal-body">
                     <div class="msg-body">
                         <ul>
-                            <li>
-                                <div class="divider">
-                                    <h6>No Message</h6>
+                            <li
+                                v-for="message in messages"
+                                :class="{'sender': message.receiver_id == this.current_id, 'repaly': message.receiver_id != this.current_id}"
+                                @mouseover="showActions(message)"
+                                @mouseleave="hideActions(message)">
+                                <p>{{ message.message }}</p>
+                                <span class="time">{{ message.created_at }}</span>
+                                <div class="actions" v-if="message.showActions">
+                                    <button class="btn btn-sm"><i class="fa-solid fa-reply"></i></button>
+                                    <button class="btn btn-sm"><i class="fa-solid fa-face-smile"></i></button>
+                                    <button class="btn btn-sm"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </li>
-                            <li class="sender">
-                                <p>Message</p>
-                                <span class="time">17:00 am</span>
-                            </li>
-                            <li class="repaly">
-                                <p>Message</p>
-                                <span class="time">17:00 am</span>
+                            <li v-if="messages.length === 0">
+                                <div class="divider">
+                                    <h6>{{ messages[0] }}</h6>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -98,11 +103,18 @@ export default {
         messages: Array
     },
     data() {
+        console.log(this.messages)
       return {
           message: this.message
       }
     },
     methods: {
+        showActions(message) {
+            message.showActions = true;
+        },
+        hideActions(message) {
+            message.showActions = false;
+        },
         sendMessage() {
               axios.post("/api/send-message", {
                   currentId: this.current_id,
@@ -130,7 +142,5 @@ export default {
 }
 </script>
 <style scoped>
-.msg-actions i {
-    margin-right: 10px;
-}
+
 </style>

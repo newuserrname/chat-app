@@ -75,17 +75,26 @@ export default {
                 });
         },
         getMessages() {
-            axios.get("/api/messages/" + this.current_id + "/" + (this.selectedId ? this.selectedId : this.provider_id))
+            axios.get("/api/messages/" + this.current_id + "/" + (this.selectedId ? this.selectedId : this.receiver_id))
                 .then((response) => {
-                    if (response.data.length > 0) {
-                        const dataMessage = response.data.map(msg => ({
-                            type: msg.type,
-                            message: msg.message,
-                            created_at: msg.created_at
-                        }));
+                    if (response.data && response.data.length >= 2) {
+                        const messages = response.data[0];
+                        const currentId = response.data[1];
+                        const receiverId = response.data[2];
+
+                        const dataMessage = messages.map((message) => {
+                            return {
+                                message: message.message,
+                                created_at: new Date(message.created_at)
+                                    .toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }),
+                                current_id: currentId,
+                                receiver_id: receiverId
+                            };
+                        });
+                        console.log(dataMessage);
                         this.messages = dataMessage;
                     } else {
-                        this.messages = "No Messages";
+                        this.messages = ["No Messages"];
                     }
                 })
                 .catch(error => {
