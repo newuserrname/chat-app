@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConversationStamp;
 use App\Models\User;
 use Google\Cloud\Firestore\FieldValue;
 use Google\Cloud\Firestore\FirestoreClient;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -161,6 +163,13 @@ class UserController extends Controller
         $currentId = $request->input('currentId');
         $receiverId = $request->input('receiverId');
         $message = $request->input('message');
+        $attachment = $request->validate([
+            'attachment' => 'required|file|mimes:jpeg,png,jpg,gif|max:25000',
+        ]);
+        $imageName = time().'.'.$request->file('attachment')->extension();
+        $path = Storage::disk('attach-chat')->put('images', $request->file('attachment'));
+        $path = Storage::disk('attach-chat')->url($path);
+        $file_attach = "https://girlsmeee.s3.amazonaws.com" . $path;
 
         $firestore = new FirestoreClient([
             'projectId' => 'laravel-chat-app-firebase'
@@ -195,7 +204,7 @@ class UserController extends Controller
             'conversation_id' => $conversationId,
             'created_at' => FieldValue::serverTimestamp(),
             'deleted_at' => 0,
-            'file_attach' => null,
+            'file_attach' => $file_attach,
             'message' => $message,
             'provider_seen' => 0,
             'seeker_seen' => 0,

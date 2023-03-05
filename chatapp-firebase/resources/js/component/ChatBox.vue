@@ -37,10 +37,16 @@
                         <ul>
                             <li
                                 v-for="message in messages"
-                                :class="{'sender': message.receiver_id == this.current_id, 'repaly': message.receiver_id != this.current_id}"
-                                @mouseover="showActions(message)"
-                                @mouseleave="hideActions(message)">
-                                <p>{{ message.message }}</p>
+                                :class="{'sender': message.receiver_id == this.current_id, 'repaly': message.receiver_id != this.current_id}">
+                                <div
+                                    @mouseover="showActions(message)"
+                                    @mouseleave="hideActions(message)">
+                                    <img
+                                        class="btn btn-sm img-thumbnail img-fluid"
+                                        v-if="message.message == null"
+                                        :src="message.file_attach" alt="Responsive image">
+                                    <p v-else>{{ message.message }}</p>
+                                </div>
                                 <span class="time">{{ message.created_at }}</span>
                                 <div class="actions" v-if="message.showActions">
                                     <button class="btn btn-sm"><i class="fa-solid fa-reply"></i></button>
@@ -62,9 +68,11 @@
                             <label for="image-input">
                                 <i class="fa-regular fa-image" title="Đính kèm file"></i>
                             </label>
-                            <input id="image-input" type="file" style="display:none;">
+                            <input
+                                id="image-input" type="file" style="display:none;"
+                                @change="selectFile">
                         </div>
-                        <div class="btn btn-lg">
+<!--                        <div class="btn btn-lg">
                             <label for="tag-input">
                                 <i class="fa-solid fa-note-sticky" title="Chọn nhãn dán"></i>
                             </label>
@@ -75,12 +83,13 @@
                                 <i class="fa-solid fa-file-import" title="Chọn file gif"></i>
                             </label>
                             <input id="gif-input" type="file" style="display:none;">
-                        </div>
-                        <input type="text" class="form-control" aria-label="message…" placeholder="Write message…"
-                        v-model="message" @keyup.enter="sendMessage">
+                        </div>-->
                         <div class="btn btn-lg">
                             <i class="fa-solid fa-face-smile" title="Chọn biểu tượng cảm xúc"></i>
                         </div>
+                        <Input
+                            type="text" class="form-control" aria-label="message…" placeholder="Write message…"
+                            v-model="message" @keyup.enter="sendMessage"/>
                         <button type="button" @click="sendMessage">Send</button>
                     </form>
                 </div>
@@ -90,9 +99,12 @@
 </template>
 
 <script>
-
+import emojis from "./EmojiPicker/EmojiPicker.vue"
 export default {
     name: "ChatBox",
+    components: {
+      emojis
+    },
     props: {
         current_id: String,
         receiver_name: String,
@@ -103,9 +115,9 @@ export default {
         messages: Array
     },
     data() {
-        console.log(this.messages)
       return {
-          message: this.message
+          message: this.message,
+          selectedFile: null,
       }
     },
     methods: {
@@ -115,32 +127,37 @@ export default {
         hideActions(message) {
             message.showActions = false;
         },
+        selectFile(event) {
+            this.selectedFile = event.target.files[0];
+        },
         sendMessage() {
-              axios.post("/api/send-message", {
-                  currentId: this.current_id,
-                  receiverId: this.selectedId ? this.selectedId : this.receiver_name,
-                  message: this.message
-              }).then((response) => {
-                  console.log(response.data);
-                  const newMessage = {
-                      type: response.data.type,
-                      message: response.data.message,
-                      created_at: response.data.created_at
-                  };
-                  this.$emit("new-message", newMessage);
-                  this.message = "";
-              }).catch(error => {
-                  console.log(error);
-              })
+            const formData = new FormData();
+            formData.append('currentId', this.current_id);
+            formData.append('receiverId', this.selectedId ? this.selectedId : this.receiver_name);
+            formData.append('message', this.message);
+            if (this.selectedFile) {
+                formData.append('attachment', this.selectedFile);
+            }
+            axios.post('/api/send-message', formData)
+                .then((response) => {
+                    const newMessage = {
+                        type: response.data.type,
+                        message: response.data.message,
+                        created_at: response.data.created_at
+                    };
+                    this.$emit('new-message', newMessage);
+                    this.message = '';
+                    this.selectedFile = null; // Reset selected file
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
-    },
-    watch: {
-        /*selectedUser(newValue, oldValue) {
-            /!*console.log('Selected user:' + newValue + ":" +oldValue)*!/
-        }*/
     },
 }
 </script>
 <style scoped>
-
+.img-thumbnail{
+    max-width: 50%;
+}
 </style>

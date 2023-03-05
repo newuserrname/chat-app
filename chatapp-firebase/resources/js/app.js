@@ -2,8 +2,6 @@ import './bootstrap';
 
 import { createApp } from 'vue'
 import ChatComponent from './component/AppChatComponent.vue'
-import PerfectScrollbar from 'vue3-perfect-scrollbar'
-import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 
 // Import the functions you need from the SDKs you need
 import firebase from "firebase/compat/app";
@@ -36,10 +34,8 @@ export {firebase, db};
 
 // app chat component
 const app = createApp({});
-/*if (process.env.NODE_ENV === 'development') {
-    app.config.devtools = true;
-}*/
-app.component('chat-vue', ChatComponent).use(PerfectScrollbar);
+
+app.component('chat-vue', ChatComponent);
 app.mount('#chat_vue');
 
 /*db.collection('conversation_message').where('conversation_id', '==', 'dd3e312c-8cdb-4c51-97e0-d72bd0b83a0e')

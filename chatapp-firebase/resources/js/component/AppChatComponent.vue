@@ -84,14 +84,14 @@ export default {
 
                         const dataMessage = messages.map((message) => {
                             return {
-                                message: message.message,
+                                message: message.message !== "undefined" ? message.message : null,
+                                file_attach: message.file_attach,
                                 created_at: new Date(message.created_at)
                                     .toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }),
                                 current_id: currentId,
                                 receiver_id: receiverId
                             };
                         });
-                        console.log(dataMessage);
                         this.messages = dataMessage;
                     } else {
                         this.messages = ["No Messages"];
