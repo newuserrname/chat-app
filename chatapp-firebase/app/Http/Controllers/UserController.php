@@ -163,6 +163,60 @@ class UserController extends Controller
         $currentId = $request->input('currentId');
         $receiverId = $request->input('receiverId');
         $message = $request->input('message');
+
+        $firestore = new FirestoreClient([
+            'projectId' => 'laravel-chat-app-firebase'
+        ]);
+
+        $conversationMessage = $firestore->collection('conversation_message');
+        $conversation = $firestore->collection('conversation');
+
+        $conversations = $conversation->where('provider_id', '=', $receiverId)
+            ->where('seeker_id', '=', $currentId)
+            ->documents();
+
+        if ($conversations->isEmpty()) {
+            $conversations = $conversation->where('provider_id', '=', $currentId)
+                ->where('seeker_id', '=', $receiverId)
+                ->documents();
+        }
+
+        // Get conversation ID
+        $conversationId = null;
+        foreach ($conversations as $document) {
+            $conversationId = $document->data()['id'];
+            break;
+        }
+
+        // Set message type
+        $role = User::where('id', $currentId)->value('role');
+        $type = $role == 2 ? 1 : ($role == 3 ? 0 : 3);
+
+        // Create new document and set its data
+        $newDocReference = $conversationMessage->add([
+            'conversation_id' => $conversationId,
+            'created_at' => FieldValue::serverTimestamp(),
+            'deleted_at' => 0,
+            'file_attach' => null,
+            'message' => $message,
+            'provider_seen' => 0,
+            'seeker_seen' => 0,
+            'stamp' => null,
+            'type' => $type,
+        ]);
+    // Try to update document with ID field
+        try {
+            $newDocReference->id();
+            return response()->json(['success' => 'success']);
+        } catch (\Throwable $error) {
+            return response()->json(['error' => $error->getMessage()], 500);
+        }
+    }
+
+    public function sendFileAttach(Request $request) {
+
+        $currentId = $request->input('currentId');
+        $receiverId = $request->input('receiverId');
         $attachment = $request->validate([
             'attachment' => 'required|file|mimes:jpeg,png,jpg,gif|max:25000',
         ]);
@@ -205,13 +259,68 @@ class UserController extends Controller
             'created_at' => FieldValue::serverTimestamp(),
             'deleted_at' => 0,
             'file_attach' => $file_attach,
-            'message' => $message,
+            'message' => null,
             'provider_seen' => 0,
             'seeker_seen' => 0,
             'stamp' => null,
             'type' => $type,
         ]);
-    // Try to update document with ID field
+        // Try to update document with ID field
+        try {
+            $newDocReference->id();
+            return response()->json(['success' => 'success']);
+        } catch (\Throwable $error) {
+            return response()->json(['error' => $error->getMessage()], 500);
+        }
+    }
+
+    public function sendStampv2(Request $request) {
+
+        $currentId = $request->input('currentId');
+        $receiverId = $request->input('receiverId');
+        $selectedStampv2 = $request->input('stampV2');
+
+        $firestore = new FirestoreClient([
+            'projectId' => 'laravel-chat-app-firebase'
+        ]);
+
+        $conversationMessage = $firestore->collection('conversation_message');
+        $conversation = $firestore->collection('conversation');
+
+        $conversations = $conversation->where('provider_id', '=', $receiverId)
+            ->where('seeker_id', '=', $currentId)
+            ->documents();
+
+        if ($conversations->isEmpty()) {
+            $conversations = $conversation->where('provider_id', '=', $currentId)
+                ->where('seeker_id', '=', $receiverId)
+                ->documents();
+        }
+
+        // Get conversation ID
+        $conversationId = null;
+        foreach ($conversations as $document) {
+            $conversationId = $document->data()['id'];
+            break;
+        }
+
+        // Set message type
+        $role = User::where('id', $currentId)->value('role');
+        $type = $role == 2 ? 1 : ($role == 3 ? 0 : 3);
+
+        // Create new document and set its data
+        $newDocReference = $conversationMessage->add([
+            'conversation_id' => $conversationId,
+            'created_at' => FieldValue::serverTimestamp(),
+            'deleted_at' => 0,
+            'file_attach' => null,
+            'message' => null,
+            'provider_seen' => 0,
+            'seeker_seen' => 0,
+            'stamp' => $selectedStampv2,
+            'type' => $type,
+        ]);
+        // Try to update document with ID field
         try {
             $newDocReference->id();
             return response()->json(['success' => 'success']);

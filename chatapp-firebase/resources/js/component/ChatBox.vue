@@ -12,6 +12,7 @@
                                 </div>
                                 <div class="flex-grow-1 ms-3">
                                     <h3>{{showSelectedName ? selectedName: this.receiver_name}}</h3>
+                                    <h5></h5>
                                 </div>
                             </div>
                         </div>
@@ -40,19 +41,19 @@
                                     <h6>No message</h6>
                                 </div>
                             </li>
-                            <li
-                                v-for="message in messages"
+                            <li v-for="message in messages" :key="message.dataConversation.id"
                                 :class="{'sender': message.receiver_id == this.current_id, 'repaly': message.receiver_id != this.current_id}">
                                 <div>
-                                    <img
-                                        class="btn btn-sm img-thumbnail img-fluid img-size"
-                                        v-if="message.message == null"
-                                        :src="message.file_attach" alt="Responsive image">
-                                    <p v-else>{{ message.message }}</p>
+                                    <img class="btn btn-sm img-thumbnail img-fluid stamp-size"
+                                         v-if="message.dataConversation.stamp !== null"
+                                         :src="message.dataConversation.stamp"
+                                         alt="Stampv2">
+                                    <img class="btn btn-sm img-thumbnail img-fluid  img-size"
+                                         v-if="message.dataConversation.file_attach !== null"
+                                         :src="message.dataConversation.file_attach"
+                                         alt="Image">
+                                    <p v-else>{{ message.dataConversation.message }}</p>
                                 </div>
-                                <img
-                                    class="btn btn-sm img-thumbnail img-fluid img-size"
-                                    src="https://media.giphy.com/media/1X4AaVSmnhT9umLneW/giphy.gif">
                                 <span class="time">{{ message.created_at }}</span>
                                 <div class="actions" v-if="message.showActions">
                                     <button class="btn btn-sm"><i class="fa-solid fa-reply"></i></button>
@@ -84,7 +85,7 @@
                                         :key="item.id"
                                         class="btn btn-sm img-thumbnail img-fluid"
                                         :src="item.stamp_link"
-                                        @click="sendStampv2(item.name)">
+                                        @click="sendStampv2(item.stamp_link)">
                                 </div>
                             </div>
                         </div>
@@ -95,7 +96,7 @@
                         <input
                             type="text" class="form-control" aria-label="message…" placeholder="Write message…"
                             v-model="message" @keyup.enter="sendMessage"/>
-                        <button type="button" @click="sendMessage">Send</button>
+                        <button type="button" @click="sendMessageAndFile()">Send</button>
                     </form>
                 </div>
             </div>
@@ -124,22 +125,28 @@ export default {
           message: this.message,
           selectedFile: null,
           itemStamps: [],
-          selectedStampv2: null,
       }
     },
     mounted() {
         this.getStampv2();
     },
     methods: {
-        sendStampv2(event) {
-            this.selectedStampv2 = event
-        },
         /*showActions(message) {
             message.showActions = true;
         },
         hideActions(message) {
             message.showActions = false;
         },*/
+        sendStampv2(link) {
+            const formData = new FormData();
+            formData.append('currentId', this.current_id);
+            formData.append('receiverId', this.selectedId ? this.selectedId : this.receiver_name);
+            formData.append('stampV2', link);
+            axios.post('/api/send-stampv2', formData)
+                .catch((error) => {
+                    console.log(error)
+                })
+        },
         selectFile(event) {
             this.selectedFile = event.target.files[0];
         },
@@ -147,6 +154,28 @@ export default {
             axios.get('/api/get-stampv2')
                 .then((response) => {
                     this.itemStamps = response.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+        sendMessageAndFile() {
+            if (this.selectedFile) {
+                this.sendFile();
+            } else {
+                this.sendMessage();
+            }
+        },
+        sendFile() {
+            const formData = new FormData();
+            formData.append('currentId', this.current_id);
+            formData.append('receiverId', this.selectedId ? this.selectedId : this.receiver_name);
+            if (this.selectedFile) {
+                formData.append('attachment', this.selectedFile);
+            }
+            axios.post('/api/send-file-attach', formData)
+                .then((response) => {
+                    console.log(response.data);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -180,7 +209,10 @@ export default {
 </script>
 <style scoped>
 .img-size{
-    max-width: 50%;
+    max-width: 40%;
+}
+.stamp-size{
+    max-width: 20%;
 }
 .stampv2 {
     background-color: white;

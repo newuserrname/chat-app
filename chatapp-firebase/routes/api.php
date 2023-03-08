@@ -23,4 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('chatlist/{id}', [UserController::class, 'getUserById']);
 Route::get('/messages/{currentId}/{receiverId}', [UserController::class, 'getMessages']);
 Route::post('/send-message', [UserController::class, 'sendMessage']);
+Route::post('/send-file-attach', [UserController::class, 'sendFileAttach']);
 Route::get('/get-stampv2', [HomeController::class, 'conversation_stamp']);
+Route::post('/send-stampv2', [UserController::class, 'sendStampv2']);

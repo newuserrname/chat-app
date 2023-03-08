@@ -77,24 +77,18 @@ export default {
         getMessages() {
             axios.get("/api/messages/" + this.current_id + "/" + (this.selectedId ? this.selectedId : this.receiver_id))
                 .then((response) => {
-                    if (response.data && response.data.length >= 2) {
-                        const messages = response.data[0];
-                        const currentId = response.data[1];
-                        const receiverId = response.data[2];
-
-                        const dataMessage = messages.map((message) => {
+                    if (response.data[0].length === 0) { // check if there are no messages
+                        this.messages = null; // set messages to null
+                    } else {
+                        this.messages = response.data[0].map((message) => { // modify each message object
                             return {
-                                message: message.message !== "undefined" ? message.message : null,
-                                file_attach: message.file_attach,
+                                dataConversation: message,
                                 created_at: new Date(message.created_at)
-                                    .toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }),
-                                current_id: currentId,
-                                receiver_id: receiverId
+                                    .toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }), // convert to gio:phut am format
+                                currentId: response.data[1],
+                                receiverId: response.data[2],
                             };
                         });
-                        this.messages = dataMessage;
-                    } else {
-                        this.messages = ["No Messages"];
                     }
                 })
                 .catch(error => {
