@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CheckRoleController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,13 +21,13 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/login-role', [\App\Http\Controllers\CheckRoleController::class, 'login'])->name('loginRole');
-Route::post('/login-role', [\App\Http\Controllers\CheckRoleController::class, 'loginPost'])->name('loginRolePost');
+Route::get('/login-role', [CheckRoleController::class, 'login'])->name('loginRole');
+Route::post('/login-role', [CheckRoleController::class, 'loginPost'])->name('loginRolePost');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('seeker');
-Route::get('chat/provider/{id}', [\App\Http\Controllers\UserController::class, 'chatWithProvider'])->name('chat')->middleware('seeker');
+Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('seeker');
+Route::get('chat/provider/{id}', [UserController::class, 'chatWithProvider'])->name('chat')->middleware('seeker');
 
-Route::get('/home-provider', [\App\Http\Controllers\HomeController::class, 'providerIndex'])->name('provider')->middleware('provider');
+Route::get('/home-provider', [HomeController::class, 'providerIndex'])->name('provider')->middleware('provider');
 
-Route::get('/profile/{id}', [\App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
+Route::get('/profile/{id}', [HomeController::class, 'profile'])->name('profile');
 

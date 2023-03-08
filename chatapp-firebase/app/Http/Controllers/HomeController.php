@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConversationStamp;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,5 +31,12 @@ class HomeController extends Controller
     {
         $user = User::find($id);
         return view('profile', compact('user'));
+    }
+
+    public function conversation_stamp()
+    {
+        $stamp = ConversationStamp::all();
+
+        return response()->json($stamp);
     }
 }

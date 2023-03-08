@@ -35,28 +35,29 @@
                 <div class="modal-body">
                     <div class="msg-body">
                         <ul>
+                            <li v-if="messages.length === 0">
+                                <div class="divider">
+                                    <h6>No message</h6>
+                                </div>
+                            </li>
                             <li
                                 v-for="message in messages"
                                 :class="{'sender': message.receiver_id == this.current_id, 'repaly': message.receiver_id != this.current_id}">
-                                <div
-                                    @mouseover="showActions(message)"
-                                    @mouseleave="hideActions(message)">
+                                <div>
                                     <img
-                                        class="btn btn-sm img-thumbnail img-fluid"
+                                        class="btn btn-sm img-thumbnail img-fluid img-size"
                                         v-if="message.message == null"
                                         :src="message.file_attach" alt="Responsive image">
                                     <p v-else>{{ message.message }}</p>
                                 </div>
+                                <img
+                                    class="btn btn-sm img-thumbnail img-fluid img-size"
+                                    src="https://media.giphy.com/media/1X4AaVSmnhT9umLneW/giphy.gif">
                                 <span class="time">{{ message.created_at }}</span>
                                 <div class="actions" v-if="message.showActions">
                                     <button class="btn btn-sm"><i class="fa-solid fa-reply"></i></button>
                                     <button class="btn btn-sm"><i class="fa-solid fa-face-smile"></i></button>
                                     <button class="btn btn-sm"><i class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </li>
-                            <li v-if="messages.length === 0">
-                                <div class="divider">
-                                    <h6>{{ messages[0] }}</h6>
                                 </div>
                             </li>
                         </ul>
@@ -72,22 +73,26 @@
                                 id="image-input" type="file" style="display:none;"
                                 @change="selectFile">
                         </div>
-<!--                        <div class="btn btn-lg">
-                            <label for="tag-input">
-                                <i class="fa-solid fa-note-sticky" title="Chọn nhãn dán"></i>
-                            </label>
-                            <input id="tag-input" type="file" style="display:none;">
+                        <div class="btn btn-lg">
+                            <i class="fa-solid fa-note-sticky" id="show-stampv2" title="Chọn nhãn dán"></i>
                         </div>
-                        <div class="btn btn-lg">
-                            <label for="gif-input">
-                                <i class="fa-solid fa-file-import" title="Chọn file gif"></i>
-                            </label>
-                            <input id="gif-input" type="file" style="display:none;">
-                        </div>-->
-                        <div class="btn btn-lg">
+                        <div class="stampv2 stampv2_visible" id="stampv2">
+                            <div class="stampv2_container">
+                                <div class="category">
+                                    <img
+                                        v-for="item in itemStamps"
+                                        :key="item.id"
+                                        class="btn btn-sm img-thumbnail img-fluid"
+                                        :src="item.stamp_link"
+                                        @click="sendStampv2(item.name)">
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="btn btn-lg">
                             <i class="fa-solid fa-face-smile" title="Chọn biểu tượng cảm xúc"></i>
                         </div>
-                        <Input
+                        <input
                             type="text" class="form-control" aria-label="message…" placeholder="Write message…"
                             v-model="message" @keyup.enter="sendMessage"/>
                         <button type="button" @click="sendMessage">Send</button>
@@ -112,23 +117,40 @@ export default {
         selectedName: String,
         selectedId: String,
         showSelectedName: true,
-        messages: Array
+        messages: Array,
     },
     data() {
       return {
           message: this.message,
           selectedFile: null,
+          itemStamps: [],
+          selectedStampv2: null,
       }
     },
+    mounted() {
+        this.getStampv2();
+    },
     methods: {
-        showActions(message) {
+        sendStampv2(event) {
+            this.selectedStampv2 = event
+        },
+        /*showActions(message) {
             message.showActions = true;
         },
         hideActions(message) {
             message.showActions = false;
-        },
+        },*/
         selectFile(event) {
             this.selectedFile = event.target.files[0];
+        },
+        getStampv2() {
+            axios.get('/api/get-stampv2')
+                .then((response) => {
+                    this.itemStamps = response.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         },
         sendMessage() {
             const formData = new FormData();
@@ -157,7 +179,43 @@ export default {
 }
 </script>
 <style scoped>
-.img-thumbnail{
+.img-size{
     max-width: 50%;
+}
+.stampv2 {
+    background-color: white;
+    border: 1px solid;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 0;
+    position: absolute;
+    inset: auto auto 0px 0px;
+    transform: translate(30px, -100px);
+    width: 20rem;
+    height: 20rem;
+    max-width: 100%;
+    display: none;
+}
+
+.stampv2_visible {
+    animation-name: slideIn;
+    animation-duration: 0.2s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.stampv2,
+.stampv2_container {
+    position: absolute;
+    padding: 1rem;
+    overflow: auto;
+    z-index: 1;
+}
+
+.category {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    color: rgb(169, 169, 169);
 }
 </style>

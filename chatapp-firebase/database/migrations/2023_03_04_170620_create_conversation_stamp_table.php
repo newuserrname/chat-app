@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('conversation_stamp', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->id('id');
             $table->string('stamp_name')->nullable('null');
             $table->string('stamp_link')->nullable('null');
             $table->timestamps();
