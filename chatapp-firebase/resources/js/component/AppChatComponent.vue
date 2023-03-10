@@ -35,12 +35,14 @@
 import ChatList from "./ChatList.vue";
 import ChatBox from "./ChatBox.vue";
 import axios from "axios";
+import NoMessages from "./NoMessages.vue";
 
 export default {
     name: "AppChatComponent",
     components: {
         ChatList,
-        ChatBox
+        ChatBox,
+        NoMessages
     },
     props: ['current_id', 'receiver_id', 'receiver_name', 'conversation_id'],
     data() {
@@ -75,6 +77,7 @@ export default {
                 });
         },
         getMessages() {
+            const conversationMessageRef = db.collection('conversation_message').get();
             axios.get("/api/messages/" + this.current_id + "/" + (this.selectedId ? this.selectedId : this.receiver_id))
                 .then((response) => {
                     if (response.data[0].length === 0) { // check if there are no messages
@@ -98,9 +101,25 @@ export default {
     },
     mounted() {
         this.listchat();
-        this.getMessages();
+        db.collection('conversation_message')
+            .onSnapshot(querySnapshot => {
+                querySnapshot.docChanges().forEach(change => {
+                    if (change.type === "added") {
+                        // handle added document
+                        this.getMessages();
+                    }
+                    if (change.type === "modified") {
+                        // handle modified document
+                        this.getMessages();
+                    }
+                    if (change.type === "removed") {
+                        // handle removed document
+                        this.getMessages();
+                    }
+                });
+            })
     },
-    watch: {
+    watch: { // fix
         selectedId: function() {
             this.getMessages()
         }

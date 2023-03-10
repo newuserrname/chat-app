@@ -58,6 +58,7 @@ class UserController extends Controller
             'conversationId' => $documentID
         ]);
     }
+
     public function getUserById($id) {
 
         $currentId = $id;
@@ -145,7 +146,9 @@ class UserController extends Controller
 
             $result = [];
             foreach ($querySnapshot3 as $value) {
-                $result[] = $value->data();
+                $documentData = $value->data();
+                $documentData['id'] = $value->id(); // lấy id của document
+                $result[] = $documentData;
             }
 
             if (count($result) > 0) {
@@ -220,10 +223,6 @@ class UserController extends Controller
         $attachment = $request->validate([
             'attachment' => 'required|file|mimes:jpeg,png,jpg,gif|max:25000',
         ]);
-        $imageName = time().'.'.$request->file('attachment')->extension();
-        $path = Storage::disk('attach-chat')->put('images', $request->file('attachment'));
-        $path = Storage::disk('attach-chat')->url($path);
-        $file_attach = "https://girlsmeee.s3.amazonaws.com" . $path;
 
         $firestore = new FirestoreClient([
             'projectId' => 'laravel-chat-app-firebase'
@@ -248,6 +247,12 @@ class UserController extends Controller
             $conversationId = $document->data()['id'];
             break;
         }
+
+        /*update path save s3 /chat/conversation_id */
+        $imageName = time().'.'.$request->file('attachment')->extension();
+        $path = Storage::disk('attach-chat')->put("chat/{$conversationId}", $request->file('attachment'));
+        $path = Storage::disk('attach-chat')->url($path);
+        $file_attach = "https://girlsmeee.s3.amazonaws.com" . $path;
 
         // Set message type
         $role = User::where('id', $currentId)->value('role');
@@ -328,4 +333,5 @@ class UserController extends Controller
             return response()->json(['error' => $error->getMessage()], 500);
         }
     }
+
 }

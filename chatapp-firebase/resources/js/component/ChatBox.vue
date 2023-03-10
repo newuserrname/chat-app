@@ -6,9 +6,9 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="d-flex align-items-center">
-                                <span class="chat-icon"><img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/arroleftt.svg" alt="image title"></span>
+                                <span class="chat-icon"><img class="img-fluid" src="https://i.pinimg.com/564x/ff/94/85/ff94855c80773f47e5fe69525cddac81.jpg" alt="user img" width="50"></span>
                                 <div class="flex-shrink-0">
-                                    <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
+                                    <img class="img-fluid" src="https://i.pinimg.com/564x/ff/94/85/ff94855c80773f47e5fe69525cddac81.jpg" width="50" alt="user img">
                                 </div>
                                 <div class="flex-grow-1 ms-3">
                                     <h3>{{showSelectedName ? selectedName: this.receiver_name}}</h3>
@@ -45,20 +45,26 @@
                                 :class="{'sender': message.receiver_id == this.current_id, 'repaly': message.receiver_id != this.current_id}">
                                 <div>
                                     <img class="btn btn-sm img-thumbnail img-fluid stamp-size"
+                                         v-on:mouseover="showDeleteButton(message.dataConversation.stamp)"
+                                         v-on:mouseleave="hideDeleteButton()"
                                          v-if="message.dataConversation.stamp !== null"
                                          :src="message.dataConversation.stamp"
                                          alt="Stampv2">
                                     <img class="btn btn-sm img-thumbnail img-fluid  img-size"
+                                         v-on:mouseover="showDeleteButton(message.dataConversation.file_attach)"
+                                         v-on:mouseleave="hideDeleteButton()"
                                          v-if="message.dataConversation.file_attach !== null"
                                          :src="message.dataConversation.file_attach"
                                          alt="Image">
-                                    <p v-else>{{ message.dataConversation.message }}</p>
+                                    <p v-on:mouseover="showDeleteButton(message.dataConversation.message)"
+                                       v-on:mouseleave="hideDeleteButton()"
+                                       v-else>{{ message.dataConversation.message }}</p>
                                 </div>
                                 <span class="time">{{ message.created_at }}</span>
-                                <div class="actions" v-if="message.showActions">
-                                    <button class="btn btn-sm"><i class="fa-solid fa-reply"></i></button>
-                                    <button class="btn btn-sm"><i class="fa-solid fa-face-smile"></i></button>
-                                    <button class="btn btn-sm"><i class="fa-solid fa-trash"></i></button>
+                                <div class="actions">
+                                    <button class="btn btn-sm" @click="deleteValue(message.dataConversation)">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
                                 </div>
                             </li>
                         </ul>
@@ -91,10 +97,12 @@
                         </div>
                         <div
                             class="btn btn-lg">
-                            <i class="fa-solid fa-face-smile" title="Chọn biểu tượng cảm xúc"></i>
+                            <i class="fa-solid fa-face-smile" id="show-stampv1" title="Chọn biểu tượng cảm xúc"></i>
                         </div>
+                        <emojis/>
                         <input
                             type="text" class="form-control" aria-label="message…" placeholder="Write message…"
+                            @click.once="makeSeen()"
                             v-model="message" @keyup.enter="sendMessage"/>
                         <button type="button" @click="sendMessageAndFile()">Send</button>
                     </form>
@@ -125,18 +133,38 @@ export default {
           message: this.message,
           selectedFile: null,
           itemStamps: [],
+          showButton: null,
       }
     },
     mounted() {
         this.getStampv2();
     },
     methods: {
-        /*showActions(message) {
-            message.showActions = true;
+        makeSeen() {
+            console.log("seen success!");
         },
-        hideActions(message) {
-            message.showActions = false;
-        },*/
+        showDeleteButton(value) {
+            this.showButton = value;
+        },
+        hideDeleteButton() {
+            this.showButton = null;
+        },
+        deleteValue(value) {
+            console.log("Delete value:", value.id);
+            const conversationMessageRef = db.collection('conversation_message').doc(value.id);
+
+            //update deleted_at
+            conversationMessageRef.update({
+                deleted_at: new Date(),
+            })
+                .then(()=>{
+                    console.log("delete successfully!");
+                })
+                .catch((error)=>{
+                    console.log("Error delete: ", error);
+                })
+            this.showButton = null
+        },
         sendStampv2(link) {
             const formData = new FormData();
             formData.append('currentId', this.current_id);

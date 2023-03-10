@@ -5,7 +5,7 @@
             <div class="col-md-7">
                 <div class="card p-3 py-4">
                     <div class="text-center">
-                        <img src="https://i.imgur.com/bDLhJiP.jpg" width="100" class="rounded-circle">
+                        <img src="https://i.pinimg.com/564x/ff/94/85/ff94855c80773f47e5fe69525cddac81.jpg" alt="user img" width="100" class="rounded-circle">
                     </div>
                     <div class="text-center mt-3">
                         <span class="bg-secondary p-1 px-4 rounded text-white">Provider</span>

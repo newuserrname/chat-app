@@ -6,6 +6,7 @@ import ChatComponent from './component/AppChatComponent.vue'
 // Import the functions you need from the SDKs you need
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
+import "firebase/compat/messaging";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -23,20 +24,25 @@ try {
 } catch (error) {
     console.error("Firebase initialization error", error.stack);
 }
-const db = firebase.firestore();
 
+const db = firebase.firestore();
 try {
     window.db = db;
 } catch (error) {
     console.error("Error setting Firestore timestamps", error.stack);
 }
-export {firebase, db};
 
-// app chat component
-const app = createApp({});
+const messaging = firebase.messaging();
+messaging.getToken({vapidKey: 'BDCtfPOEO33pZMiubQ_2m-12Xb9r8MjMO5b8Qqyjp5EbPtwgvulah9nEbS23d6Zv3JYsgF3fGwPkqQXb-1X4nzE'})
+    .catch((error)=>{
+    console.log(error)
+});
+export {firebase, db, messaging};
 
-app.component('chat-vue', ChatComponent);
-app.mount('#chat_vue');
+// Mount the Vue app
+const chatVue = createApp({});
+chatVue.component('chat-vue', ChatComponent);
+chatVue.mount('#chat_vue');
 
 /*db.collection('conversation_message').where('conversation_id', '==', 'dd3e312c-8cdb-4c51-97e0-d72bd0b83a0e')
     .orderBy('created_at').get()

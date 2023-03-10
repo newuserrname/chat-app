@@ -45,7 +45,7 @@ export default {
 </script>
 
 <template>
-	<div class="emoji_picker">
+	<div class="emoji_picker" id="stampv1">
 		<div class="picker_container">
 			<div class="category" v-for="category in categories" :key="`category_${category}`">
 				<span>{{ category }}</span>
@@ -64,12 +64,14 @@ export default {
 
 .emoji_picker
 {
-	position: relative;
-	display: flex;
+    position: absolute;
+    inset: auto auto 0px 0px;
+    transform: translate(30px, -100px);
+    overflow: hidden;
 	flex-direction: column;
-	width: 20rem;
-	height: 20rem;
-	max-width: 100%;
+	width: 15rem;
+	height: 15rem;
+    display: none;
 }
 
 .emoji_picker,

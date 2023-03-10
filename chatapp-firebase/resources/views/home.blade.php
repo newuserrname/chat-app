@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Posts') }}</div>
-                <div class="card-body">
+                <div class="card-body table-responsive">
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>

@@ -19,12 +19,12 @@
                                      v-for="[id, name] in filteredChatList">
                                     <a @click="selected(name, id)" href="#" class="d-flex align-items-center">
                                         <div class="flex-shrink-0">
-                                            <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
+                                            <img class="img-fluid" src="https://i.pinimg.com/564x/ff/94/85/ff94855c80773f47e5fe69525cddac81.jpg" alt="user img" width="50">
 <!--                                            <span class="active"></span>-->
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <h3>{{name}}</h3>
-                                            <p>!!...</p>
+                                            <p>Hi there</p>
                                         </div>
                                     </a>
                                 </div>
@@ -74,7 +74,6 @@ export default {
             this.$emit("selectId", id)
             //console.log(this.receiverId = id)
         },
-
     },
 }
 </script>

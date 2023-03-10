@@ -12,14 +12,13 @@
                 <div class="card-header">
                     Account
                 </div>
-                <div class="card-body">
-                    <table class="table table-dark table-hover">
+                <div class="card-body table-responsive">
+                    <table class="table table-dark table-hover table-sm">
                         <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Password</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -28,7 +27,6 @@
                             <th scope="row">@php echo $i++ @endphp</th>
                             <td>{{$user->name}}</td>
                             <td>{{$user->email}}</td>
-                            <td>Password</td>
                         </tr>
                         @endforeach
                         </tbody>
