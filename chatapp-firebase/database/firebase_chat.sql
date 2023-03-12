@@ -11,7 +11,7 @@
  Target Server Version : 80030
  File Encoding         : 65001
 
- Date: 06/03/2023 19:51:01
+ Date: 13/03/2023 03:25:17
 */
 
 SET NAMES utf8mb4;
@@ -28,7 +28,7 @@ CREATE TABLE `conversation_stamp`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of conversation_stamp
@@ -38,10 +38,10 @@ INSERT INTO `conversation_stamp` VALUES (2, 'Valentines Day Love', 'https://medi
 INSERT INTO `conversation_stamp` VALUES (3, 'Day Love', 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjY0YTNlZjFlNGFhZThhYzExM2Y3ZDc1ODAwMGZkNTJiODYzM2JhNCZjdD1n/0T559s8zghIiob0dhe/giphy.gif', '2023-03-06 18:08:37', '2023-03-06 18:08:39');
 INSERT INTO `conversation_stamp` VALUES (4, 'Wooo', 'https://media.giphy.com/media/Bm31tGMWYF7feTIb8j/giphy.gif', '2023-03-06 18:09:37', '2023-03-06 18:09:39');
 INSERT INTO `conversation_stamp` VALUES (5, 'Goodnight', 'https://media.giphy.com/media/1X4AaVSmnhT9umLneW/giphy.gif', '2023-03-06 18:09:56', '2023-03-06 18:09:58');
-INSERT INTO `conversation_stamp` VALUES (6, 'Couple Love', 'https://media.giphy.com/media/1X4AaVSmnhT9umLneW/giphy.gif', '2023-03-06 18:10:29', '2023-03-06 18:10:31');
+INSERT INTO `conversation_stamp` VALUES (6, 'Couple Love', 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDlkZWNjMjQ1YjQ1ZjQyMTIwYjdhYzg0MTgxZmY2ODgwOGUzMmY3NCZjdD1n/31X1QV8gA1uMoBNmjN/giphy.gif', '2023-03-06 18:10:29', '2023-03-06 18:10:31');
 INSERT INTO `conversation_stamp` VALUES (7, 'Snow White Kiss', 'https://media.giphy.com/media/AIDv87fiokBva/giphy.gif', '2023-03-06 18:10:58', '2023-03-06 18:11:00');
 INSERT INTO `conversation_stamp` VALUES (8, 'Cat', 'https://media.giphy.com/media/W3QKEujo8vztC/giphy.gif', '2023-03-06 18:11:31', '2023-03-06 18:11:33');
-INSERT INTO `conversation_stamp` VALUES (9, 'Cat Massaging', 'https://media.giphy.com/media/W3QKEujo8vztC/giphy.gif', '2023-03-06 18:12:29', '2023-03-06 18:12:32');
+INSERT INTO `conversation_stamp` VALUES (9, 'Cat Massaging', 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDRjNzhmYmFiZDBkMzRjMGFhZWJlMDNiOGQwOTJjMjhiMmIzZWZjMSZjdD1n/aC45M5Q4D07Pq/giphy.gif', '2023-03-06 18:12:29', '2023-03-06 18:12:32');
 INSERT INTO `conversation_stamp` VALUES (10, 'Thank U', 'https://media.giphy.com/media/4Rd3RQPeksO6RvBPXu/giphy.gif', '2023-03-06 18:13:01', '2023-03-06 18:13:04');
 
 -- ----------------------------
@@ -125,6 +125,37 @@ CREATE TABLE `personal_access_tokens`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for provider
+-- ----------------------------
+DROP TABLE IF EXISTS `provider`;
+CREATE TABLE `provider`  (
+  `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `profile_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of provider
+-- ----------------------------
+INSERT INTO `provider` VALUES ('988998d4-4298-4183-978d-264c454ed5ef', 'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+INSERT INTO `provider` VALUES ('988998d4-6207-4a6b-ac1e-d6e304840685', 'https://cdnimg.vietnamplus.vn/uploaded/bokttj/2023_01_02/avatar_the_way_of_water.jpg');
+
+-- ----------------------------
+-- Table structure for seeker
+-- ----------------------------
+DROP TABLE IF EXISTS `seeker`;
+CREATE TABLE `seeker`  (
+  `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `profile_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of seeker
+-- ----------------------------
+INSERT INTO `seeker` VALUES ('988998d5-3bb7-44f5-887e-82870132ef30', 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+
+-- ----------------------------
 -- Table structure for users
 -- ----------------------------
 DROP TABLE IF EXISTS `users`;
@@ -145,11 +176,11 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('988998d4-4298-4183-978d-264c454ed5ef', 'Thanh Trường', 'truong@example.com', '2023-02-23 15:50:19', '$2y$10$T3aN1GCbZG1PgPx13Lo1teJO7HLHb9JZvpUrhm/XggXcMuqAF.D0C', 2, 'cpZqYdgGX7J19gQqNair03UtPgbVf1Z9cWuNdHmytyQBCiLoS5xNl4uQBYOj', '2023-02-23 15:50:19', '2023-02-23 15:50:19');
+INSERT INTO `users` VALUES ('988998d4-4298-4183-978d-264c454ed5ef', 'Provider Zero', 'truong@example.com', '2023-02-23 15:50:19', '$2y$10$T3aN1GCbZG1PgPx13Lo1teJO7HLHb9JZvpUrhm/XggXcMuqAF.D0C', 2, 'T0Qs9vJsewKJToCiEJFixk8K0Vw1cq3w2XWHfJkFINLMVGKvhAfz8w9MhfAf', '2023-02-23 15:50:19', '2023-02-23 15:50:19');
 INSERT INTO `users` VALUES ('988998d4-6207-4a6b-ac1e-d6e304840685', 'Provider Two', 'providertwo@example.com', '2023-02-23 15:50:19', '$2y$10$ztVJnjMiCvfE3TNOGOs1R.hY3/JY4OI/bBnAaHrKKO1VORUNW4K.2', 2, 'EMXlUhfPXR', '2023-02-23 15:50:19', '2023-02-23 15:50:19');
 INSERT INTO `users` VALUES ('988998d4-7ecb-4a5f-9be4-d812c2364a4f', 'Provider Three', 'providerthree@example.com', '2023-02-23 15:50:19', '$2y$10$XI.dkpHrMLLV6t5Q6ozZhOV0CfaBt9HJ9qUwEqD8jufEU.z2Ab74q', 2, 'cwajSRpuXX', '2023-02-23 15:50:20', '2023-02-23 15:50:20');
 INSERT INTO `users` VALUES ('988998d5-3ae0-4feb-9e97-ba991b474f45', 'Kamryn Morar', 'okiehn@example.com', '2023-03-05 01:57:08', '$2y$10$FiaalPnAzuFZiKYyNJBgB.PEbgtta9AbaNsHMlFAmDj3Qm.bKGwu6', 3, '17GIxqVRqhqUN4VmtOi653GzjHhv8pbAMPUqjOpY86Wq2M0k9lGqCYuclDav', '2023-02-23 15:50:20', '2023-02-23 15:50:20');
-INSERT INTO `users` VALUES ('988998d5-3bb7-44f5-887e-82870132ef30', 'Solon Farrell', 'orin.friesen@example.com', '2023-02-23 15:50:20', '$2y$10$SUCNEdSHoqvlGkXqGEgtieD83M6bD8CSNDb8AEYMhLor8f.42DMKi', 3, 'IxBP9jyeNN3zkPPPYrwurtZx2hTHEduw2fIa3MYrohUkzaCq7CWrK260sxV7', '2023-02-23 15:50:20', '2023-02-23 15:50:20');
+INSERT INTO `users` VALUES ('988998d5-3bb7-44f5-887e-82870132ef30', 'Seeker One', 'orin.friesen@example.com', '2023-02-23 15:50:20', '$2y$10$SUCNEdSHoqvlGkXqGEgtieD83M6bD8CSNDb8AEYMhLor8f.42DMKi', 3, 'xkqLyzJDAlvSIo7YLHc0UcbTLz8CjnA1AxaAMZEfzXfERegvgTipkAMrEsLy', '2023-02-23 15:50:20', '2023-02-23 15:50:20');
 INSERT INTO `users` VALUES ('988998d5-3cde-403d-9123-d330f56e6287', 'Dovie Larkin Sr.', 'isai.skiles@example.net', '2023-02-23 15:50:20', '$2y$10$L/Qv4XqRGu6Ul.7UgVmThuQNI7NtMet7oAeiMPfuEZzsRjv9LX.S2', 3, 'mIC14AA526dGQFJgKL8lpBQwsGI150KYqSlfuWZj2fJjMbin50D2rcNN3X8h', '2023-02-23 15:50:20', '2023-02-23 15:50:20');
 INSERT INTO `users` VALUES ('988998d5-3e0d-4a94-9867-fc9dd923ac45', 'Jamir Johnston', 'haylie04@example.org', '2023-02-23 15:50:20', '$2y$10$nPgf0qJz3BpAnpyMa5GtfuMrH2uvJrzHVSvEneFlH49cSdskfsx6i', 3, 'OwZDRzFUyh', '2023-02-23 15:50:20', '2023-02-23 15:50:20');
 INSERT INTO `users` VALUES ('988998d5-3f1e-4123-8ae6-c4e38586bc8d', 'Dorris Armstrong', 'abergnaum@example.org', '2023-02-23 15:50:20', '$2y$10$io8leLooGnpy3uCKBwT/oOlUzDSvJxX6sO8kxW9t3C.1InFCdFMsu', 3, 'RLgmHpkMo5', '2023-02-23 15:50:20', '2023-02-23 15:50:20');
