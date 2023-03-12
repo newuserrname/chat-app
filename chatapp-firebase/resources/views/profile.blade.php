@@ -22,7 +22,7 @@
                             <li><i class="fa fa-google"></i></li>
                         </ul>
                         <div class="buttons">
-                            <a href="{{route('chat',$user->id)}}" class="btn btn-outline-primary px-4">Message</a>
+                            <a href="{{route('seeker_conversation.chat',$user->id)}}" class="btn btn-outline-primary px-4">Message</a>
                             <button class="btn btn-primary px-4 ms-3">Contact</button>
                         </div>
                     </div>

@@ -5,10 +5,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
           integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <div id="provider_chat_vue">
-        <provider-chat-vue
+    <div id="seeker_chat_mobile_vue">
+        <seeker-chat-mobile-vue
             :current_id="{{json_encode($currentId)}}">
-        </provider-chat-vue>
+        </seeker-chat-mobile-vue>
     </div>
 @endsection

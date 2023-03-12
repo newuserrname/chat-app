@@ -6,6 +6,7 @@ use App\Models\ConversationStamp;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Google\Cloud\Firestore\FirestoreClient;
 use Ramsey\Uuid\Uuid;
@@ -22,8 +23,10 @@ class HomeController extends Controller
     public function providerIndex()
     {
         $currentId = Auth::id();
+        $avatar = DB::table('provider')->where('id', $currentId)->first();
         return view('provider_home', [
             'currentId' => $currentId,
+            /*'$avatar' => $avatar['profile_url'],*/
         ]);
     }
 
@@ -31,12 +34,5 @@ class HomeController extends Controller
     {
         $user = User::find($id);
         return view('profile', compact('user'));
-    }
-
-    public function conversation_stamp()
-    {
-        $stamp = ConversationStamp::all();
-
-        return response()->json($stamp);
     }
 }

@@ -6,13 +6,16 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "aws/aws-sdk-php": "^3.261",
         "google/cloud-firestore": "^1.27",
         "grpc/grpc": "^1.42",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "laravel/ui": "^4.2"
+        "laravel/ui": "^4.2",
+        "league/flysystem-aws-s3-v3": "^3.12",
+        "nesbot/carbon": "^2.66"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

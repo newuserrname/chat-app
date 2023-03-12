@@ -930,10 +930,12 @@ a.add {
                 height: 0;
                 border-style: solid;
                 border-width: 0 12px 15px 12px;
-                border-color: transparent transparent #f5f5f5 transparent;
                 -webkit-transform: rotate(-37deg);
                 -ms-transform: rotate(-37deg);
                 transform: rotate(-37deg);
+            }
+            img {
+                color: #000;
             }
             p {
                 color: #000;
@@ -941,6 +943,7 @@ a.add {
                 line-height: 1.5;
                 font-weight: 400;
                 padding: 10px 15px;
+                border-color: transparent transparent #f5f5f5 transparent;
                 background: #f5f5f5;
                 display: inline-block;
                 border-bottom-left-radius: 10px;
@@ -956,7 +959,7 @@ a.add {
                 }
             }
         }
-        li.repaly {
+        li.reply {
             display: block;
             width: 100%;
             text-align: right;
@@ -970,11 +973,14 @@ a.add {
                 width: 0;
                 height: 0;
                 border-style: solid;
+                border-width: 0 12px 15px 12px;
                 border: 15px;
-                border-color: transparent transparent #4b7bec transparent;
                 -webkit-transform: rotate(37deg);
                 -ms-transform: rotate(37deg);
                 transform: rotate(37deg);
+            }
+            img {
+                color: #000;
             }
             p {
                 color: #fff;
@@ -983,6 +989,7 @@ a.add {
                 font-weight: 400;
                 padding: 10px 15px;
                 background: #4b7bec;
+                border-color: transparent transparent #4b7bec transparent;
                 display: inline-block;
                 border-radius: 15px;
                 margin-bottom: 0;
@@ -1020,7 +1027,7 @@ a.add {
     line-height: 1.5;
     font-weight: 400;
 }
-li.repaly {
+li.reply {
     .time {
         margin-right: 20px;
     }
@@ -1240,12 +1247,12 @@ button {
                 p {
                     font-size: 13px;
                     padding: 8px;
-                    border-bottom-left-radius: 6px;
+                    border-bottom-right-radius: 6px;
                     border-top-right-radius: 6px;
                     border-bottom-right-radius: 6px;
                 }
             }
-            li.repaly {
+            li.reply {
                 p {
                     font-size: 13px;
                     padding: 8px;

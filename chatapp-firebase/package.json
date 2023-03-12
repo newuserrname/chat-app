@@ -15,12 +15,12 @@
     },
     "dependencies": {
         "@vitejs/plugin-vue": "^4.0.0",
-        "firebase": "^9.17.1",
-        "jquery": "^3.6.3",
+        "firebase": "^9.17.2",
+        "jquery": "^3.6.4",
         "magnific-popup": "^1.1.0",
         "sass": "^1.55.0",
         "sass-loader": "^13.2.0",
-        "vue": "^3.2.47",
-        "vue-chat-scroll": "^1.4.0"
+        "tank-vue3-seamless-scroll": "^1.0.13",
+        "vue": "^3.2.47"
     }
 }
