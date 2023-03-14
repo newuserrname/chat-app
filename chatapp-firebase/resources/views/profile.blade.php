@@ -5,7 +5,7 @@
             <div class="col-md-7">
                 <div class="card p-3 py-4">
                     <div class="text-center">
-                        <img src="https://i.pinimg.com/564x/ff/94/85/ff94855c80773f47e5fe69525cddac81.jpg" alt="user img" width="100" class="rounded-circle">
+                        <img src="{{$avatar->profile_url}}" alt="user img" width="100" class="rounded-circle">
                     </div>
                     <div class="text-center mt-3">
                         <span class="bg-secondary p-1 px-4 rounded text-white">Provider</span>
@@ -22,7 +22,7 @@
                             <li><i class="fa fa-google"></i></li>
                         </ul>
                         <div class="buttons">
-                            <a href="{{route('seeker_conversation.chat',$user->id)}}" class="btn btn-outline-primary px-4">Message</a>
+                            <a href="{{route('seeker_conversation.chat_provider',$user->id)}}" class="btn btn-outline-primary px-4">Message</a>
                             <button class="btn btn-primary px-4 ms-3">Contact</button>
                         </div>
                     </div>

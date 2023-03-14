@@ -21,7 +21,7 @@ class SeekerChatController extends Controller
         $receiverId = User::where('id', $id)->first();
         $currentId = Auth::id();
         $firestore = new FirestoreClient([
-            'projectId' => 'chat-realtime-firebase-1eaac'
+            'projectId' => env('FIREBASE_PROJECT_ID')
         ]);
 
         if ($id === null) {
@@ -81,7 +81,7 @@ class SeekerChatController extends Controller
         $receiverId = User::where('id', $id)->first();
         $currentId = Auth::id();
         $firestore = new FirestoreClient([
-            'projectId' => 'chat-realtime-firebase-1eaac'
+            'projectId' => env('FIREBASE_PROJECT_ID')
         ]);
 
         if ($id != null) {
@@ -122,7 +122,7 @@ class SeekerChatController extends Controller
         $currentId = Auth::id();
 
         $firestore = new FirestoreClient([
-            'projectId' => 'chat-realtime-firebase-1eaac'
+            'projectId' => env('FIREBASE_PROJECT_ID')
         ]);
         $conversationRef = $firestore->collection('conversation');
 
@@ -193,7 +193,7 @@ class SeekerChatController extends Controller
         $currentId = Auth::id();
 
         $firestore = new FirestoreClient([
-            'projectId' => 'chat-realtime-firebase-1eaac'
+            'projectId' => env('FIREBASE_PROJECT_ID')
         ]);
 
         $conversationMessage = $firestore->collection('conversation_message');
@@ -248,7 +248,7 @@ class SeekerChatController extends Controller
         $message = $request->input('message');
 
         $firestore = new FirestoreClient([
-            'projectId' => 'chat-realtime-firebase-1eaac'
+            'projectId' => env('FIREBASE_PROJECT_ID')
         ]);
 
         $conversationMessage = $firestore->collection('conversation_message');
@@ -296,7 +296,7 @@ class SeekerChatController extends Controller
         ]);
 
         $firestore = new FirestoreClient([
-            'projectId' => 'chat-realtime-firebase-1eaac'
+            'projectId' => env('FIREBASE_PROJECT_ID')
         ]);
 
         $conversationMessage = $firestore->collection('conversation_message');
@@ -352,7 +352,7 @@ class SeekerChatController extends Controller
         $selectedStampv2 = $request->input('stampV2');
 
         $firestore = new FirestoreClient([
-            'projectId' => 'chat-realtime-firebase-1eaac'
+            'projectId' => env('FIREBASE_PROJECT_ID')
         ]);
 
         $conversationMessage = $firestore->collection('conversation_message');

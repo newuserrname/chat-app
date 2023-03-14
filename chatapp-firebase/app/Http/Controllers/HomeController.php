@@ -33,6 +33,7 @@ class HomeController extends Controller
     public function profile($id)
     {
         $user = User::find($id);
-        return view('profile', compact('user'));
+        $avatar = DB::table('provider')->where('id', $id)->first();
+        return view('profile', compact('user', 'avatar'));
     }
 }

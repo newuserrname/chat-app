@@ -1,5 +1,5 @@
 <template>
-    __
+    __C
     <!-- char-area -->
     <div class="container">
         <div class="row">
@@ -76,7 +76,6 @@ export default {
                 hour: '2-digit',
                 minute: '2-digit',
                 hour12: true,
-                timeZoneName: 'short'
             };
             if (this.selectedConversation != null && this.selectedConversation.receiver_id != null) {
                 axios.get("/seeker-conversation/messages/" + this.selectedConversation.receiver_id)

@@ -1,5 +1,5 @@
 <template>
-    <div class="chatbox">
+    <div class="showbox">
         <div v-if="selectedConversation" class="modal-dialog-scrollable">
             <!--            <div v-if="selectedConversation" class="modal-dialog-scrollable">-->
             <div class="modal-content">
@@ -332,13 +332,13 @@ ul li.reply p {
 }
  */
 li.reply p {
-    border-top-right-radius: 0px !important;
-    border-bottom-left-radius: 0px !important;;
+    /*border-top-left-radius: 0px !important;*/
+    border-bottom-right-radius: 0px !important;
 }
 
 li.sender p {
     border-top-left-radius: 0px !important;
-    border-bottom-right-radius: 0px !important;;
+    /*border-bottom-right-radius: 0px !important;*/
 }
 
 .text-left {

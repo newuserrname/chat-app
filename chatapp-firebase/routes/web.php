@@ -36,8 +36,8 @@ Route::get('/profile/{id}', [HomeController::class, 'profile'])->name('profile')
 
 Route::prefix('/seeker-conversation')->middleware('seeker')->group(function () {
     Route::get('/chat', [SeekerChatController::class, 'chatWithProvider'])->name('seeker_conversation.chat');
-    Route::get('/chat/{id}', [SeekerChatController::class, 'chatWithProvider'])->name('seeker_conversation.chat');
-    Route::get('/chat-mobile/{id}', [SeekerChatController::class, 'chatMobileWithProvider'])->name('seeker_conversation.chat');
+    Route::get('/chat/{id}', [SeekerChatController::class, 'chatWithProvider'])->name('seeker_conversation.chat_provider');
+    Route::get('/chat-mobile/{id}', [SeekerChatController::class, 'chatMobileWithProvider'])->name('seeker_conversation.chat_mobile_provider');
     Route::get('/chatlist', [SeekerChatController::class, 'getChatList']);
     Route::get('/messages/{receiverId}', [SeekerChatController::class, 'getMessages']);
     Route::post('/send-message', [SeekerChatController::class, 'sendMessage']);
@@ -49,8 +49,8 @@ Route::prefix('/seeker-conversation')->middleware('seeker')->group(function () {
 
 Route::prefix('/provider-conversation')->middleware('provider')->group(function () {
     Route::get('/chat', [ProviderChatController::class, 'chatWithSeeker'])->name('provider_conversation.chat');
-    Route::get('/chat/{id}', [ProviderChatController::class, 'chatWithSeeker'])->name('provider_conversation.chat');
-    Route::get('/chat-mobile/{id}', [ProviderChatController::class, 'chatMobileWithSeeker'])->name('provider_conversation.chat');
+    Route::get('/chat/{id}', [ProviderChatController::class, 'chatWithSeeker'])->name('provider_conversation.chat_seeker');
+    Route::get('/chat-mobile/{id}', [ProviderChatController::class, 'chatMobileWithSeeker'])->name('provider_conversation.chat_mobile_seeker');
     Route::get('/chatlist', [ProviderChatController::class, 'getChatList']);
     Route::get('/messages/{receiverId}', [ProviderChatController::class, 'getMessages']);
     Route::post('/send-message', [ProviderChatController::class, 'sendMessage']);

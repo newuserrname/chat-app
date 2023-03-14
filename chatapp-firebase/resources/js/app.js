@@ -1,10 +1,10 @@
 import './bootstrap';
 import { createApp } from 'vue'
 import SeekerChatComponent from './component/conversation/seeker/SeekerAppChatComponent.vue'
-import SeekerAppChatMobileComponent from "./component/conversation/seeker_mobile/SeekerAppChatMobileComponent.vue";
+import SeekerAppChatMobileComponent from "./component/conversation/seeker_mobile/SeekerAppChatMobileComponent.vue"
 
 import ProviderChatComponent from './component/conversation/provider/ProviderAppChatComponent.vue'
-import ProviderAppChatMobileComponent from "./component/conversation/provider_mobile/ProviderAppChatMobileComponent.vue";
+import ProviderAppChatMobileComponent from "./component/conversation/provider_mobile/ProviderAppChatMobileComponent.vue"
 
 // Import the functions you need from the SDKs you need
 import firebase from "firebase/compat/app";
@@ -43,14 +43,19 @@ try {
 export {firebase, db};
 
 // Mount the Vue app
+// Seeker
 const seekerChatVue = createApp({});
 const seekerChatMobileVue = createApp({});
-const providerChatVue = createApp({});
-const providerChatMobileVue = createApp({});
+
 seekerChatVue.component('seeker-chat-vue', SeekerChatComponent);
 seekerChatVue.mount('#seeker_chat_vue');
 seekerChatMobileVue.component('seeker-chat-mobile-vue', SeekerAppChatMobileComponent);
 seekerChatMobileVue.mount('#seeker_chat_mobile_vue');
+
+// Provider
+const providerChatVue = createApp({});
+const providerChatMobileVue = createApp({});
+
 providerChatVue.component('provider-chat-vue', ProviderChatComponent);
 providerChatVue.mount('#provider_chat_vue');
 providerChatMobileVue.component('provider-chat-mobile-vue', ProviderAppChatMobileComponent);

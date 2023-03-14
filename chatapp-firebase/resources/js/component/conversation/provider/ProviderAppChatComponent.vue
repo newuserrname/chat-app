@@ -33,7 +33,7 @@ import ChatBox from "./ProviderChatBox.vue";
 import axios from "axios";
 
 export default {
-    name: "AppChatComponent",
+    name: "ProviderAppChatComponent",
     components: {
         ChatList,
         ChatBox,
@@ -85,11 +85,8 @@ export default {
                 day: '2-digit',
                 hour: '2-digit',
                 minute: '2-digit',
-                hour12: true,
-                timeZoneName: 'short'
+                hour12: false,
             };
-
-
             if (this.selectedConversation != null && this.selectedConversation.seeker_id != null) {
 
                 axios.get("/provider-conversation/messages/" + this.selectedConversation.seeker_id)

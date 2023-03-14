@@ -32,7 +32,7 @@ import ChatList from "./SeekerChatList.vue";
 import ChatBox from "./SeekerChatBox.vue";
 import axios from "axios";
 export default {
-    name: "AppChatComponent",
+    name: "SeekerAppChatComponent",
     components: {
         ChatList,
         ChatBox,
@@ -86,7 +86,6 @@ export default {
                 hour: '2-digit',
                 minute: '2-digit',
                 hour12: true,
-                timeZoneName: 'short'
             };
             if (this.selectedConversation != null && this.selectedConversation.receiver_id != null) {
                 axios.get("/seeker-conversation/messages/" + this.selectedConversation.receiver_id)

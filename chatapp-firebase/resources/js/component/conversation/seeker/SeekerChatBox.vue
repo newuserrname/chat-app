@@ -115,7 +115,7 @@
                         <div @click="clickStamp" class="btn btn-lg">
                             <i class="fa-solid fa-note-sticky" title="Choose Stamp"></i>
                         </div>
-                        <div v-if="showStamp" class="stampv2 stampv2_visible">
+                        <div v-show="showStamp" class="stampv2 stampv2_visible">
                             <div class="stampv2_container">
                                 <div class="category">
                                     <img
@@ -163,6 +163,9 @@ export default {
         this.$nextTick(() => this.scrollToEnd());
     },
     methods: {
+        clickStamp() {
+            this.showStamp = !this.showStamp
+        },
         scrollToEnd: function () {
             document.getElementById("currentChat").scrollTop = document.getElementById("currentChat").scrollHeight;
         },
@@ -236,9 +239,6 @@ export default {
                     });
                 });
             });
-        },
-        clickStamp() {
-            this.showStamp = true
         },
         sendStampv2(link) {
             const formData = new FormData();
@@ -332,13 +332,13 @@ ul li.reply p {
 }
  */
 li.reply p {
-    border-top-right-radius: 0px !important;
-    border-bottom-left-radius: 0px !important;;
+    /*border-top-left-radius: 0px !important;*/
+    border-bottom-right-radius: 0px !important;
 }
 
 li.sender p {
     border-top-left-radius: 0px !important;
-    border-bottom-right-radius: 0px !important;;
+    /*border-bottom-right-radius: 0px !important;*/
 }
 
 .text-left {
